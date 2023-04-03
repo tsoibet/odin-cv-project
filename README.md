@@ -9,6 +9,8 @@ Live Demo: http://tsoibet.github.io/odin-cv-project
   - Class components
   - Props
   - State
+  - Functional components
+  - Hooks
   - Controlled components
   - JSX
 - CSS
