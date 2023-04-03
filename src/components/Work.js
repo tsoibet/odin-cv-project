@@ -1,83 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default class Work extends React.Component {
+export default function Work(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: this.props.title || "",
-      company: this.props.company || "",
-      currentJob: this.props.currentJob || false,
-      startDate: this.props.startDate || "",
-      endDate: this.props.endDate || "",
-      description: this.props.description || "",
-      editing: (this.props.editing === undefined ? true : this.props.editing),
-    }
-  }
+  const [title, setTitle] = useState(props.title || "");
+  const [company, setCompany] = useState(props.company || "");
+  const [currentJob, setCurrentJob] = useState(props.currentJob || false);
+  const [startDate, setStartDate] = useState(props.startDate || "");
+  const [endDate, setEndDate] = useState(props.endDate || "");
+  const [description, setDescription] = useState(props.description || "");
+  const [editing, setEditing] = useState(props.editing === undefined ? true : props.editing);
 
-  handleAddJobInputChange = (event) => {
-    if (event.target.type === "checkbox") {
-      this.setState({[event.target.name]: event.target.checked});
-    } else {
-      this.setState({[event.target.name]: event.target.value});
-    }
-  };
-
-  saveJob = (event) => {
+  const saveJob = (event) => {
     event.preventDefault();
-    this.setState({editing: false});
+    setEditing(false);
   };
 
-  showForm = () => {
-    this.setState({editing: true});
+  const showForm = () => {
+    setEditing(true);
   }
 
-  deleteForm = () => {
-    this.props.deleteWork(this.props.id);
+  const deleteForm = () => {
+    props.deleteWork(props.id);
   }
 
-  render() {
-    if (this.state.editing) {
-      return (
-        <li className="job" data-id={this.state.id}>
-          <form onSubmit={this.saveJob}>
-            <input type="text" name="title" placeholder="Title" autoComplete="off" required value={this.state.title} onChange={this.handleAddJobInputChange} />
-            <input type="text" name="company" placeholder="Company Name" autoComplete="off" required value={this.state.company} onChange={this.handleAddJobInputChange} />
-            <div className="currentJob">
-              <input type="checkbox" name="currentJob" id="currentJob" checked={this.state.currentJob} onChange={this.handleAddJobInputChange} />
-              <label htmlFor="currentJob">I am currently working in this role</label>
-            </div>
-            <div className="date">
-              <label htmlFor="startDate">Start Date</label>
-              <input id="startDate" name="startDate" type="date" required value={this.state.startDate} onChange={this.handleAddJobInputChange} />
-            </div>
-            <div className="date">
-              <label className={this.state.currentJob ? "greyOut" : ""} htmlFor="endDate">End Date</label>
-              <input id="endDate" name="endDate" type="date" disabled={this.state.currentJob} required value={this.state.endDate} onChange={this.handleAddJobInputChange} />
-            </div>
-            <textarea name="description" placeholder="Description" rows="4" value={this.state.description} onChange={this.handleAddJobInputChange} />
-            <span className="floating buttons">
-              <button className="save" type="submit">Save</button>
-              <button className="delete" type="reset" onClick={this.deleteForm}>Delete</button>
-            </span>
-          </form>
-        </li>
-      );
-    } else {
-      return(
-        <li className="job" data-id={this.state.id}>
-          <div>
-            <div className="title">{this.state.title}</div>
-            <div className="company">{this.state.company}</div>
-            <div className="date">{this.state.startDate} - {this.state.currentJob ? "Present" : this.state.endDate}</div>
-            <div className="description">{this.state.description}</div>
-            <span className="floating buttons">
-              <button className="edit" onClick={this.showForm}>Edit</button>
-              <button className="delete" onClick={this.deleteForm}>Delete</button>
-            </span>
+  if (editing) {
+    return (
+      <li className="job" data-id={props.id}>
+        <form onSubmit={saveJob}>
+          <input type="text" name="title" placeholder="Title" autoComplete="off" required value={title} onChange={(event) => setTitle(event.target.value)} />
+          <input type="text" name="company" placeholder="Company Name" autoComplete="off" required value={company} onChange={(event) => setCompany(event.target.value)} />
+          <div className="currentJob">
+            <input type="checkbox" name="currentJob" id="currentJob" checked={currentJob} onChange={(event) => setCurrentJob(event.target.checked)} />
+            <label htmlFor="currentJob">I am currently working in this role</label>
           </div>
-        </li>
-      );
-    }
+          <div className="date">
+            <label htmlFor="startDate">Start Date</label>
+            <input id="startDate" name="startDate" type="date" required value={startDate} onChange={(event) => setStartDate(event.target.value)} />
+          </div>
+          <div className="date">
+            <label className={currentJob ? "greyOut" : ""} htmlFor="endDate">End Date</label>
+            <input id="endDate" name="endDate" type="date" disabled={currentJob} required value={endDate} onChange={(event) => setEndDate(event.target.value)} />
+          </div>
+          <textarea name="description" placeholder="Description" rows="4" value={description} onChange={(event) => setDescription(event.target.value)} />
+          <span className="floating buttons">
+            <button className="save" type="submit">Save</button>
+            <button className="delete" type="reset" onClick={deleteForm}>Delete</button>
+          </span>
+        </form>
+      </li>
+    );
+  } else {
+    return(
+      <li className="job" data-id={props.id}>
+        <div>
+          <div className="title">{title}</div>
+          <div className="company">{company}</div>
+          <div className="date">{startDate} - {currentJob ? "Present" : endDate}</div>
+          <div className="description">{description}</div>
+          <span className="floating buttons">
+            <button className="edit" onClick={showForm}>Edit</button>
+            <button className="delete" onClick={deleteForm}>Delete</button>
+          </span>
+        </div>
+      </li>
+    );
   }
+
 }
