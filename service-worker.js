@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/odin-cv-project/precache-manifest.7753f6e3ca626562b59ac6c99d01d16a.js"
+  "/odin-cv-project/precache-manifest.b7095f57014c37ac83237b620791ff3f.js"
 );
 
 workbox.clientsClaim();
