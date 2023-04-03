@@ -1,75 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default class Education extends React.Component {
+export default function Education(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: this.props.title || "",
-      school: this.props.school || "",
-      startDate: this.props.startDate || "",
-      endDate: this.props.endDate || "",
-      editing: (this.props.editing === undefined ? true : this.props.editing),
-    }
-  }
+  const [title, setTitle] = useState(props.title || "");
+  const [school, setSchool] = useState(props.school || "");
+  const [startDate, setStartDate] = useState(props.startDate || "");
+  const [endDate, setEndDate] = useState(props.endDate || "");
+  const [editing, setEditing] = useState(props.editing === undefined ? true : props.editing);
 
-  handleAddSchoolInputChange = (event) => {
-    if (event.target.type === "checkbox") {
-      this.setState({[event.target.name]: event.target.checked});
-    } else {
-      this.setState({[event.target.name]: event.target.value});
-    }
-  };
-
-  saveSchool = (event) => {
+  const saveSchool = (event) => {
     event.preventDefault();
-    this.setState({editing: false});
+    setEditing(false);
   };
 
-  showForm = () => {
-    this.setState({editing: true});
+  const showForm = () => {
+    setEditing(true);
   }
 
-  deleteForm = () => {
-    this.props.deleteEducation(this.props.id);
+  const deleteForm = () => {
+    props.deleteEducation(props.id);
   }
 
-  render() {
-    if (this.state.editing) {
-      return (
-        <li className="school" data-id={this.state.id}>
-          <form onSubmit={this.saveSchool}>
-            <input type="text" name="title" placeholder="Title" autoComplete="off" required value={this.state.title} onChange={this.handleAddSchoolInputChange} />
-            <input type="text" name="school" placeholder="School Name" autoComplete="off" required value={this.state.school} onChange={this.handleAddSchoolInputChange} />
-            <div className="date">
-              <label htmlFor="startDate">Start Date</label>
-              <input id="startDate" name="startDate" type="date" required value={this.state.startDate} onChange={this.handleAddSchoolInputChange} />
-            </div>
-            <div className="date">
-              <label htmlFor="endDate">End Date</label>
-              <input id="endDate" name="endDate" type="date" required value={this.state.endDate} onChange={this.handleAddSchoolInputChange} />
-            </div>
-            <span className="floating buttons">
-              <button className="save" type="submit">Save</button>
-              <button className="delete" type="reset" onClick={this.deleteForm}>Delete</button>
-            </span>
-          </form>
-        </li>
-      );
-    } else {
-      return(
-        <li className="school" data-id={this.state.id}>
-          <div>
-            <div className="title">{this.state.title}</div>
-            <div className="school">{this.state.school}</div>
-            <div className="date">{this.state.startDate} - {this.state.endDate}</div>
-            <span className="floating buttons">
-              <button className="edit" onClick={this.showForm}>Edit</button>
-              <button className="delete" onClick={this.deleteForm}>Delete</button>
-            </span>
+  if (editing) {
+    return (
+      <li className="school" data-id={props.id}>
+        <form onSubmit={(event) => saveSchool(event)}>
+          <input type="text" name="title" placeholder="Title" autoComplete="off" required value={title} onChange={(event) => setTitle(event.target.value)} />
+          <input type="text" name="school" placeholder="School Name" autoComplete="off" required value={school} onChange={(event) => setSchool(event.target.value)} />
+          <div className="date">
+            <label htmlFor="startDate">Start Date</label>
+            <input id="startDate" name="startDate" type="date" required value={startDate} onChange={(event) => setStartDate(event.target.value)} />
           </div>
-        </li>
-      );
-    }
+          <div className="date">
+            <label htmlFor="endDate">End Date</label>
+            <input id="endDate" name="endDate" type="date" required value={endDate} onChange={(event) => setEndDate(event.target.value)} />
+          </div>
+          <span className="floating buttons">
+            <button className="save" type="submit">Save</button>
+            <button className="delete" type="reset" onClick={deleteForm}>Delete</button>
+          </span>
+        </form>
+      </li>
+    );
+  } else {
+    return(
+      <li className="school" data-id={props.id}>
+        <div>
+          <div className="title">{title}</div>
+          <div className="school">{school}</div>
+          <div className="date">{startDate} - {endDate}</div>
+          <span className="floating buttons">
+            <button className="edit" onClick={showForm}>Edit</button>
+            <button className="delete" onClick={deleteForm}>Delete</button>
+          </span>
+        </div>
+      </li>
+    );
   }
+
 }

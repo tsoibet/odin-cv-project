@@ -1,13 +1,11 @@
 import React from "react";
 
-export default class Footer extends React.Component {
+export default function Footer() {
 
+  return (
+    <div className="Footer">
+      Created by tsoibet @ The Odin Project 2023
+    </div>
+  );
 
-  render() {
-    return (
-      <div className="Footer">
-        Created by tsoibet @ The Odin Project 2023
-      </div>
-    );
-  }
 }
